@@ -1,27 +1,26 @@
-import logo from './logo.svg';
-import flag from './flag.svg';
+import React, {useEffect, useState} from "react";
 import './App.css';
+import {Users} from "./componets/Users";
+import {UserDetails} from "./componets/UserDetails";
+import {getUsers} from "./api/getUsers";
+
 
 function App() {
-  return (
+    const [users, setUsers] = useState([]);
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        getUsers().then(resp => setUsers(resp));
+    }, []);
+
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Glory to Ukraine!
-        </p>
-        <img src={flag} className="App-flag" alt="flag" />
-        <p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        </p>
-      </header>
+        <div className="info-block">
+            {!!users.length && <Users users={users} onSelectUser={setUserId}/>}
+        </div>
+        <div className="info-block">
+            {!!userId && <UserDetails onRemoveUserDetails={setUserId} userId={userId}/>}
+        </div>
     </div>
   );
 }
